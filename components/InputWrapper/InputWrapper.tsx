@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React from 'react';
+import React, { memo } from 'react';
 
 import styles from './InputWrapper.module.scss';
 type Props = {
@@ -28,4 +28,4 @@ const InputFormField: React.FC<Props> = ({
         <div className={cn('d-block')}>{children}</div>
     </div>
 );
-export default InputFormField;
+export default memo(InputFormField);
