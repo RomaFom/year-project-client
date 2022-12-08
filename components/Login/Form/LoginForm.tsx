@@ -1,20 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import cn from 'classnames';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
-
 import Button from '@/components/Button/Button';
 
 import InputWrapper from '@/components/InputWrapper';
+import { Circle } from '@/components/Loaders';
 import { useUser } from '@/providers/UserProvider/UserContext';
 
 import { IUserResponse } from '@/utils/api';
 import { ILoginForm, loginSchema } from '@/utils/login';
 import { basicError } from '@/utils/notifications';
+
 const LoginForm: React.FC = () => {
     const [cookie, setCookie] = useCookies(['tokenData']);
+    const [submitting, setSubmitting] = useState(false);
     const router = useRouter();
     const { user } = useUser();
 
@@ -32,8 +34,9 @@ const LoginForm: React.FC = () => {
         }
     }, [user]);
 
-    const onSubmit = async (values: ILoginForm): Promise<void> => {
+    const onSubmit = useCallback(async (values: ILoginForm): Promise<void> => {
         try {
+            setSubmitting(true);
             const res: IUserResponse = await (
                 await fetch('/api/auth/login', {
                     method: 'POST',
@@ -53,8 +56,10 @@ const LoginForm: React.FC = () => {
             });
         } catch (err) {
             // console.log('error', err);
+        } finally {
+            setSubmitting(false);
         }
-    };
+    }, []);
 
     return (
         <form className="pt-20" onSubmit={handleSubmit(onSubmit)}>
@@ -75,7 +80,13 @@ const LoginForm: React.FC = () => {
                     />
                 </InputWrapper>
                 <span className="flex justify-center pt-2nex">
-                    <Button type="submit">Login</Button>
+                    <Button disabled={submitting} type="submit">
+                        {submitting ? (
+                            <Circle height={20} width={20} />
+                        ) : (
+                            'Login'
+                        )}
+                    </Button>
                 </span>
             </div>
         </form>

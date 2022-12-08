@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React from 'react';
 
 import styles from './Button.module.scss';
@@ -19,7 +20,7 @@ const Button: React.FC<Props> = ({
 }) => (
     <span className={styles[buttonStyle]}>
         <button
-            className={className}
+            className={cn(className, 'flex flex-wrap justify-center gap-2')}
             disabled={disabled}
             onClick={() => {
                 if (onClick) {

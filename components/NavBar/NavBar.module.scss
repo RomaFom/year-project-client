@@ -94,11 +94,19 @@
   transition-duration: 0.3s;
 }
 
+.arrow {
+  display: block;
+}
+
 @media (width < 500px) {
-  body.open .dropdowns {
+  .navbar.open .dropdowns {
     opacity: 1;
     visibility: visible;
     left: 0;
+  }
+
+  .arrow {
+    display: none;
   }
 }
 
