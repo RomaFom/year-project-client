@@ -6,7 +6,6 @@ import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
 import Button from '@/components/Button/Button';
 import InputWrapper from '@/components/InputWrapper';
-import { Circle } from '@/components/Loaders';
 import { useUser } from '@/providers/UserProvider';
 import { IUserResponse } from '@/utils/api';
 import { basicError } from '@/utils/notifications';
@@ -93,12 +92,12 @@ const SignUpForm: React.FC = () => {
                     </InputWrapper>
 
                     <span className="flex justify-center pt-2nex">
-                        <Button disabled={submitting} type="submit">
-                            {submitting ? (
-                                <Circle height={20} width={20} />
-                            ) : (
-                                'Sign Up'
-                            )}
+                        <Button
+                            disabled={submitting}
+                            showLoader={submitting}
+                            type="submit"
+                        >
+                            Sign Up
                         </Button>
                     </span>
                 </div>

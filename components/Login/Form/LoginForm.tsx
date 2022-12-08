@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import Button from '@/components/Button/Button';
 
 import InputWrapper from '@/components/InputWrapper';
-import { Circle } from '@/components/Loaders';
 import { useUser } from '@/providers/UserProvider/UserContext';
 
 import { IUserResponse } from '@/utils/api';
@@ -80,12 +79,12 @@ const LoginForm: React.FC = () => {
                     />
                 </InputWrapper>
                 <span className="flex justify-center pt-2nex">
-                    <Button disabled={submitting} type="submit">
-                        {submitting ? (
-                            <Circle height={20} width={20} />
-                        ) : (
-                            'Login'
-                        )}
+                    <Button
+                        disabled={submitting}
+                        showLoader={submitting}
+                        type="submit"
+                    >
+                        Login
                     </Button>
                 </span>
             </div>

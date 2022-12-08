@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import React from 'react';
 
+import { LineDots } from '@/components/Loaders';
 import styles from './Button.module.scss';
 type Props = {
     children: React.ReactNode;
@@ -9,6 +10,7 @@ type Props = {
     type: 'button' | 'submit' | 'reset';
     className?: string;
     buttonStyle?: 'primary' | 'secondary' | 'tertiary' | 'buy';
+    showLoader: boolean;
 };
 const Button: React.FC<Props> = ({
     children,
@@ -17,6 +19,7 @@ const Button: React.FC<Props> = ({
     type = 'button',
     buttonStyle = 'primary',
     className,
+    showLoader,
 }) => (
     <span className={styles[buttonStyle]}>
         <button
@@ -30,7 +33,8 @@ const Button: React.FC<Props> = ({
             // eslint-disable-next-line react/button-has-type
             type={type || 'button'}
         >
-            {children}
+            {showLoader ? <LineDots height={24} width={40} /> : children}
+            {/*{children}*/}
         </button>
     </span>
 );
