@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React from 'react';
 
 import styles from './InputWrapper.module.scss';
@@ -24,7 +25,7 @@ const InputFormField: React.FC<Props> = ({
                 {labelActionButton}
             </span>
         )}
-        <div className="input-field d-block">{children}</div>
+        <div className={cn('d-block')}>{children}</div>
     </div>
 );
 export default InputFormField;
