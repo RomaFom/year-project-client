@@ -1,11 +1,13 @@
 import React from 'react';
 import Layout from '@/components/Layout/Layout';
+import AutoSuggest from '@/components/Search';
+import Search from '@/components/Search/Search';
 import { SSRProps } from '@/utils';
 import { parseCookie } from '@/utils/api/parseCookie';
 
 const HomePage: React.FC<SSRProps> = ({ token }) => (
     <Layout token={token}>
-        <div>Main Page</div>
+        <Search />
     </Layout>
 );
 

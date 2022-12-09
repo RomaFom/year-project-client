@@ -16,7 +16,7 @@ const InputFormField: React.FC<Props> = ({
     children,
     tooltip,
 }) => (
-    <div className={styles.inputWrapper}>
+    <div className={cn(styles.inputWrapper)}>
         {labelId && (
             <span className="d-flex justify-content-between">
                 <label className="d-block pb-2 d-flex" htmlFor={labelId}>

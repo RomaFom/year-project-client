@@ -4,7 +4,7 @@ export enum Roles {
     SUPERUSER,
 }
 
-interface BaseResponse {
+export interface BaseResponse {
     status: number;
     error?: {
         message: string;
