@@ -7,6 +7,7 @@ import {
 } from 'react-icons/ai';
 
 import { BsPatchCheck } from 'react-icons/bs';
+import Tooltip from '@/components/Tooltip/Tooltip';
 import { IKeywords } from '@/utils/keywords/keywords.types';
 import styles from './Card.module.scss';
 export enum CardType {
@@ -31,11 +32,13 @@ const Card: React.FC<Props> = ({ item, variant }) => (
             variant,
         )}
     >
-        {item.isAuthorized ? (
-            <BsPatchCheck size={25} />
-        ) : (
-            <AiOutlineInfoCircle size={25} />
-        )}
+        <Tooltip text={item.isAuthorized ? 'Authorized' : 'Not Authorized'}>
+            {item.isAuthorized ? (
+                <BsPatchCheck size={25} />
+            ) : (
+                <AiOutlineInfoCircle size={25} />
+            )}
+        </Tooltip>
 
         <div
             className={cn('mx-auto border-2 rounded-lg px-3 py-1 border-black')}
