@@ -1,8 +1,8 @@
 .autoSuggest {
 
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  //flex-direction: column;
+  //align-items: center;
   justify-content: center;
   gap: 28px;
 
@@ -20,7 +20,8 @@
   }
 
   .search input {
-    width: 440px;
+    //max-width: 440px;
+    //width: auto;
     height: 44px;
     padding: 0 20px 0 44px;
     border-radius: 22px;
@@ -30,6 +31,10 @@
     font-size: 16px;
     font-family: inherit;
     outline: none;
+
+    &:focus {
+      @apply border-main-green;
+    }
   }
 
   .search input.showDropdown {

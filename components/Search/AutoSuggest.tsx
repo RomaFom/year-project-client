@@ -62,14 +62,18 @@ const AutoSuggest: React.FC<Props> = ({
     useOnClickOutside(menuRef, () => setShowResults(false));
 
     return (
-        <div className={styles.autoSuggest}>
+        <div className={cn(styles.autoSuggest)}>
             <div className={cn(styles.search)}>
                 <span className="">
                     {isFetching ? <PuffLoader /> : <BsSearch />}
                 </span>
                 <input
-                    className={cn(showDropdown && styles.showDropdown)}
+                    className={cn(
+                        showDropdown && styles.showDropdown,
+                        'sm:w-[500px]',
+                    )}
                     onChange={handleChange}
+                    placeholder={'Search for a keyword'}
                     ref={ref}
                     spellCheck={false}
                     type="text"
