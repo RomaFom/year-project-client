@@ -31,16 +31,13 @@ const AutoSuggest: React.FC<Props> = ({
     const ref = useRef<HTMLInputElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const handleChange = useMemo(() => {
-        let prevValue = '';
-        return (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (prevValue !== e.target.value) {
-                prevValue = e.target.value;
-                setInputValue(e.target.value);
-                setShowResults(true);
-            }
-        };
-    }, []);
+    const handleChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setInputValue(e.target.value);
+            setShowResults(true);
+        },
+        [],
+    );
 
     useEffect(() => {
         setSearchValue(debouncedValue || '');

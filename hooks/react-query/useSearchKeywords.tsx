@@ -16,10 +16,9 @@ export const useSearchKeywords = (word: string): IHook => {
     const { isLoading, isError, error, data, isFetching } = useQuery({
         queryKey: ['keyword', word],
         queryFn: () =>
-            fetch('api/keywords/search', {
-                method: 'POST',
-                body: JSON.stringify({ keyword: word }),
-            }).then(res => res.json()),
+            fetch(`api/keywords/search?keyword=${word}`).then(res =>
+                res.json(),
+            ),
         enabled: !!word,
         keepPreviousData: true,
     });

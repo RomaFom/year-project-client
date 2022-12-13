@@ -9,8 +9,9 @@ export default async function handler(
     res: NextApiResponse<IKeywordResponse>,
 ): Promise<void> {
     try {
-        const body = JSON.parse(req.body);
-        const { keyword } = body;
+        // const body = JSON.parse(req.body);
+        // console.log(req.query);
+        const { keyword } = req.query;
 
         const response: AxiosResponse = await axios.post(
             process.env.CORE_API + 'keywords/search',
