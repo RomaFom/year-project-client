@@ -1,4 +1,5 @@
 import jwt_decode from 'jwt-decode';
+import { GetServerSideProps } from 'next';
 import React from 'react';
 import Layout from '@/components/Layout/Layout';
 import { IUserState } from '@/providers/UserProvider';
@@ -15,14 +16,14 @@ const AddAdmin: React.FC<SSRProps> = ({ token }) => (
 );
 export default AddAdmin;
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export async function getServerSideProps(context: any) {
+export const getServerSideProps: GetServerSideProps = async context => {
     const cookies = context.req.headers.cookie || null;
     if (!cookies) {
         return {
             redirect: {
                 destination: '/',
             },
+            props: {},
         };
     }
 
@@ -32,6 +33,7 @@ export async function getServerSideProps(context: any) {
             redirect: {
                 destination: '/',
             },
+            props: {},
         };
     }
 
@@ -41,10 +43,11 @@ export async function getServerSideProps(context: any) {
             redirect: {
                 destination: '/',
             },
+            props: {},
         };
     }
 
     return {
         props: { token: parsed }, // will be passed to the page component as props
     };
-}
+};
