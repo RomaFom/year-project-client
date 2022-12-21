@@ -52,7 +52,7 @@ const NavBar: React.FC<Props> = ({ token }) => {
                                 </button>
                                 <div className={styles.dropdownMenu}>
                                     <button type={'button'}>
-                                        <Link href={'/'}>Link 1</Link>
+                                        <Link href={'/add-term'}>Add Term</Link>
                                     </button>
                                     <button type={'button'}>
                                         <Link href={'/'}>Link 2</Link>
