@@ -7,8 +7,9 @@ import {
 } from 'react-icons/ai';
 
 import { BsPatchCheck } from 'react-icons/bs';
+import { ILanguageDetect } from '@/components/Search/Search';
 import Tooltip from '@/components/Tooltip/Tooltip';
-import { IKeywords } from '@/utils/keywords/keywords.types';
+import { IKeywords, Language } from '@/utils/keywords/keywords.types';
 import styles from './Card.module.scss';
 export enum CardType {
     GREEN = 'from-green-light via-cyan-light to-green-light',
@@ -18,22 +19,35 @@ export enum CardType {
 type Props = {
     item: IKeywords;
     variant: CardType;
+    lang: ILanguageDetect;
+    className?: string;
 };
-const Card: React.FC<Props> = ({ item, variant }) => (
+const Card: React.FC<Props> = ({ item, variant, lang, className }) => (
     <div
         className={cn(
             styles.card,
+            className,
             'm-2 p-5 ',
-            'w-full max-w-[300px] min-h-[200px]',
+            'break-words',
             'rounded-2xl',
             'flex flex-col',
             'text-light-oxford-blue text-xl',
             'bg-gradient-to-r',
             variant,
         )}
+        style={{
+            direction: lang.cardLang === Language.ENGLISH ? 'ltr' : 'rtl',
+        }}
     >
-        <Tooltip text={item.isAuthorized ? 'Authorized' : 'Not Authorized'}>
-            {item.isAuthorized ? (
+        <Tooltip
+            className={cn('pb-3')}
+            text={
+                item[lang.cardLang].isAuthorized
+                    ? 'Authorized'
+                    : 'Not Authorized'
+            }
+        >
+            {item[lang.cardLang].isAuthorized ? (
                 <BsPatchCheck size={25} />
             ) : (
                 <AiOutlineInfoCircle size={25} />
@@ -43,17 +57,20 @@ const Card: React.FC<Props> = ({ item, variant }) => (
         <div
             className={cn('mx-auto border-2 rounded-lg px-3 py-1 border-black')}
         >
-            {item.keyword}
+            {item[lang.cardLang].keyword}
         </div>
-        <div className={'text-end pt-2'}>{item.meaning}</div>
+        <div>
+            <div className={'text-start pt-2'}>{item[lang.cardLang].short}</div>
+            <div className={'text-start pt-2'}>{item[lang.cardLang].long}</div>
+        </div>
         <div className={'flex justify-between mt-auto'}>
             <div className={'flex gap-2'}>
-                {item.likes.length}
+                {item[lang.cardLang].likes.length}
                 <AiOutlineLike className={'my-auto'} />
             </div>
 
             <div className={'flex gap-2'}>
-                {item.dislikes.length}
+                {item[lang.cardLang].dislikes.length}
                 <AiOutlineDislike className={'my-auto'} />
             </div>
         </div>
