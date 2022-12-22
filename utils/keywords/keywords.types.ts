@@ -1,16 +1,24 @@
 export enum Language {
     ENGLISH = 'en',
     HEBREW = 'he',
+    ARABIC = 'ar',
+}
+
+export interface IKeyword {
+    keyword: string;
+    short: string;
+    long: Language;
+    isAuthorized: boolean;
+    likes: Array<string>;
+    dislikes: Array<string>;
+    _id: string;
 }
 
 export interface IKeywords {
     _id: string;
-    keyword: string;
-    meaning: string;
-    language: Language;
-    isAuthorized: boolean;
-    likes: Array<string>;
-    dislikes: Array<string>;
+    he: IKeyword;
+    en: IKeyword;
+    ar: IKeyword;
 }
 
 // {
