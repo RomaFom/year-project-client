@@ -10,18 +10,23 @@ import React, {
 import { BsSearch } from 'react-icons/bs';
 import { useOnClickOutside } from 'usehooks-ts';
 import { PuffLoader } from '@/components/Loaders';
+import { ILanguageDetect } from '@/components/Search/Search';
 import { useDebounce } from '@/hooks';
-import { IKeywords } from '@/utils/keywords/keywords.types';
+import { IKeywords, Language } from '@/utils/keywords/keywords.types';
 import styles from './AutoSuggest.module.scss';
 type Props = {
     setSelected: React.Dispatch<React.SetStateAction<IKeywords>>;
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+    lang: ILanguageDetect;
+    setLang: React.Dispatch<React.SetStateAction<ILanguageDetect>>;
     results: Array<IKeywords>;
     isFetching: boolean;
 };
 const AutoSuggest: React.FC<Props> = ({
     setSearchValue,
     setSelected,
+    lang,
+    setLang,
     results,
     isFetching,
 }) => {
@@ -40,16 +45,36 @@ const AutoSuggest: React.FC<Props> = ({
     );
 
     useEffect(() => {
+        if (results && results.length) {
+            Object.values(Language).forEach(lang => {
+                if (results[0][lang].keyword?.match(inputValue)) {
+                    setLang(prev => ({
+                        ...prev,
+                        inputLang: lang,
+                    }));
+                }
+            });
+        }
+    }, [results]);
+
+    useEffect(() => {
         setSearchValue(debouncedValue || '');
     }, [debouncedValue]);
 
-    const handleSelect = useCallback((word: IKeywords) => {
-        setSelected(word);
-        if (ref.current) {
-            ref.current.value = word.keyword;
-        }
-        setShowResults(false);
-    }, []);
+    const handleSelect = useCallback(
+        (word: IKeywords) => {
+            setSelected(word);
+            if (ref.current) {
+                ref.current.value = word[lang.inputLang].keyword;
+            }
+            setShowResults(false);
+            setLang(prev => ({
+                ...prev,
+                cardLang: lang.inputLang,
+            }));
+        },
+        [lang],
+    );
 
     const showDropdown = useMemo(
         () => showResults && results?.length && inputValue,
@@ -92,7 +117,7 @@ const AutoSuggest: React.FC<Props> = ({
                                 }}
                                 type={'button'}
                             >
-                                {keyword.keyword}
+                                {keyword[lang.inputLang].keyword}
                             </button>
                         ))}
                     </div>
