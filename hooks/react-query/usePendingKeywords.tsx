@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { IKeyword, IKeywords, Language } from '@/utils/keywords/keywords.types';
 import { useEffect, useState } from 'react';
-import { IAddKeywordRequest, IAddKeywordResponse } from '@/utils/api';
+import { IApproveKeywordRequest, IApproveKeywordResponse } from '@/utils/api';
 
 interface IHook {
     isLoading: boolean;
@@ -36,11 +36,11 @@ export const usePendingKeywords = (lang: string): IHook => {
         // validate keyword id
         if (!langId) return;
         console.log('after validation ', {kwid, lang, langId})
-        const body: IAddKeywordRequest = {id: kwid, langId}
+        const body: IApproveKeywordRequest = {id: kwid, langId}
         // send request
         fetch('/api/keywords/approve-keyword', {method: 'POST', body: JSON.stringify(body)})
             .then(res => res.json())
-            .then((data: IAddKeywordResponse) => {
+            .then((data: IApproveKeywordResponse) => {
                 // handle errors
                 if (data.status >= 400 || !data.data) {
                     alert(data.error?.message ?? 'Something went wrong...')

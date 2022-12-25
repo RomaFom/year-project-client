@@ -1,29 +1,28 @@
-import cn from 'classnames';
 import React, { memo } from 'react';
+// types
+import { IKeywords, Language } from '@/utils/keywords/keywords.types';
+// styles
+import cn from 'classnames';
+import styles from './Card.module.scss';
+// components
+import Tooltip from '@/components/Tooltip/Tooltip';
+import { BsPatchCheck } from 'react-icons/bs';
 import {
     AiOutlineDislike,
     AiOutlineInfoCircle,
     AiOutlineLike,
 } from 'react-icons/ai';
 
-import { BsPatchCheck } from 'react-icons/bs';
-import { ILanguageDetect } from '@/components/Search/Search';
-import Tooltip from '@/components/Tooltip/Tooltip';
-import { IKeywords, Language } from '@/utils/keywords/keywords.types';
-import styles from './Card.module.scss';
-
 type Props = {
     item: IKeywords;
     lang: Language;
-    className?: string;
-    addKeywordHandler: (kwid: string, langId: Language) => unknown
+    approveKeywordHandler: (kwid: string, langId: Language) => unknown
 };
-const PendingCard: React.FC<Props> = ({ item, lang, className, addKeywordHandler }) => {
+const PendingCard: React.FC<Props> = ({ item, lang, approveKeywordHandler }) => {
 
     // handlers
     const onApproveHandler = () => {
-        console.log('On item: ', {lang})
-        addKeywordHandler(item._id, lang)
+        approveKeywordHandler(item._id, lang)
     }
 
     // -- if authorized language, nothing to show
@@ -32,7 +31,6 @@ const PendingCard: React.FC<Props> = ({ item, lang, className, addKeywordHandler
     else return (
         <div className={cn(
                 styles.card,
-                className,
                 'm-2 p-5 ',
                 'break-words',
                 'rounded-2xl',

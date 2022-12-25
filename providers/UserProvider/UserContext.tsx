@@ -10,10 +10,14 @@ export interface IUserState {
 
 type UserContextType = {
     user: IUserState | null;
+    isLoading: boolean;
+    setIsLoading: (res: boolean) => void;
     setUser: (user: IUserState | null) => void;
     clearUser: () => void;
 };
 const UserContextDefaultValues: UserContextType = {
+    isLoading: true,
+    setIsLoading: () => null,
     user: null,
     setUser: () => null,
     clearUser: () => null,

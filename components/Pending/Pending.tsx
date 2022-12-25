@@ -12,10 +12,8 @@ import Grid from '../Grid';
 const Pending: React.FC = () => {
     // states
     const [lang, setLang] = useState<Language>(Language.ENGLISH);
-    const { isError, isFetching, isLoading, data, error, approveKeyword } =
-        usePendingKeywords(lang);
+    const { data, approveKeyword } = usePendingKeywords(lang);
 
-    console.log({data})
     return (
         <div>
             {/* language select */}
@@ -30,7 +28,7 @@ const Pending: React.FC = () => {
                         <PendingCard
                             key={kw._id}
                             item={kw}
-                            addKeywordHandler={approveKeyword}
+                            approveKeywordHandler={approveKeyword}
                             lang={lang}
                         />)
                 }

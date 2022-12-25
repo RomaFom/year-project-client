@@ -9,9 +9,14 @@ export default async function handler(
     res: NextApiResponse<IKeywordResponse>,
 ): Promise<void> {
     try {
-        // const body = JSON.parse(req.body);
-        // console.log(req.query);
         const { lang } = req.query;
+
+        // -- check language query
+        if (!lang) {
+            return res.status(400).json({
+                status: 400, error: {message: "Language not provided."}
+            });
+        }
 
         const response: AxiosResponse = await axios.get(
             `${process.env.CORE_API}keywords/pending?lang=${lang}`
@@ -22,7 +27,6 @@ export default async function handler(
             data: response.data,
         });
     } catch (error: any) {
-        console.log({error})
         res.status(error.response.status).json({
             status: error.response.status,
             error: {

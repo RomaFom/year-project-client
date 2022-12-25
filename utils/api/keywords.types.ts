@@ -5,11 +5,11 @@ export interface IKeywordResponse extends BaseResponse {
     data?: Array<IKeywords>;
 }
 
-export interface IAddKeywordRequest {
+export interface IApproveKeywordRequest {
     id: string;
     langId: string;
 }
 
-export interface IAddKeywordResponse extends BaseResponse {
+export interface IApproveKeywordResponse extends BaseResponse {
     data?: IKeywords
 }

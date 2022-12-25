@@ -16,6 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
     const [cookie, setCookie, removeCookie] = useCookies(['tokenData']);
     const router = useRouter();
     const [ctxUser, setCtxUser] = useState<IUserState | null>(null);
+    const [ctxIsLoading, setCtxIsLoading] = useState<boolean>(true)
     // Create a client
     const queryClient = new QueryClient();
 
@@ -28,6 +29,8 @@ export default function App({ Component, pageProps }: AppProps) {
     const userValues = useMemo(
         () => ({
             user: ctxUser,
+            setIsLoading: setCtxIsLoading,
+            isLoading: ctxIsLoading,
             setUser: setCtxUser,
             clearUser: handleLogout,
         }),
@@ -41,6 +44,9 @@ export default function App({ Component, pageProps }: AppProps) {
             })
                 .then(res => res.json())
                 .then((data: IUserDataResponse) => {
+                    // isLoading => flase
+                    setCtxIsLoading(false)
+                    // -- user not authorized
                     if (data.status >= 400 || !data.data) {
                         handleLogout();
                         return;
