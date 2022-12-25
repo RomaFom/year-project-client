@@ -59,7 +59,7 @@ const AddTermForm:React.FC<Props> = ({strKeyword,strShort,strLong,setNewTermValu
                 console.log(err);
 
             } finally {
-                
+
                 setSubmitting(false);
             }
         },
@@ -74,21 +74,21 @@ const AddTermForm:React.FC<Props> = ({strKeyword,strShort,strLong,setNewTermValu
                     <InputWrapper labelId={'keyword'} labelText={strKeyword}>
                         <input autoComplete={'off'}
                             className={cn(errors.keyword && 'invalid')} 
-                            class={alignTextForm}
+                            // class={alignTextForm}
                             {...register('keyword')}/>
                     </InputWrapper>
 
                     <InputWrapper labelId={'short'} labelText={strShort}>
                         <input type="text" autoComplete={'off'}
                             className={cn(errors.short && 'invalid')}
-                            class={alignTextForm}
+                            // class={alignTextForm}
                             {...register('short')}/>
                     </InputWrapper>
 
                     <InputWrapper labelId={'long'} labelText={strLong}>
                         <input autoComplete={'off'}
                             className={cn(errors.long && 'invalid')}
-                            class={alignTextForm}
+                            // class={alignTextForm}
                             {...register('long')}/>
                     </InputWrapper>
 
