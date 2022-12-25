@@ -9,7 +9,7 @@ export enum Language {
 export interface IKeyword {
     keyword: string;
     short: string;
-    long: Language;
+    long: string;
     isAuthorized: boolean;
     likes: Array<string>;
     dislikes: Array<string>;
@@ -25,20 +25,20 @@ export interface IKeywords {
 
 export interface INewTerm{
     keyword: string;
-    meaning: string;
-    language: Language;
+    short: string;
+    long: string;
 }
 
 
 export const newTermSchema = Yup.object().shape({
     keyword: Yup.string()
-        .required('Term is required'),
-        meaning: Yup.string()
-        .required('Meaning is required')
-        .min(3, 'Meaning must be at least 3 characters'),
-        language: Yup.string()
-        .required('Password Must Match')
-        .oneOf(Object.values(Language), 'Language must match'),
+    .required('Term is required'),
+    short: Yup.string()
+    .required('Meaning is required')
+    .min(3, 'Meaning must be at least 3 characters'),
+    long: Yup.string()
+    .required('Long meaning is required')
+    .min(6, 'Long meaning must be at least 6 characters'),
 });
 
 // {

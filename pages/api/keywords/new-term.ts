@@ -9,7 +9,7 @@ export default async function handler(
     res: NextApiResponse<IKeywordResponse>,
 ): Promise<void> {
     try {
-            //console.log(req.body);
+            console.log(req.body);
             const data= JSON.parse(req.body);
 
             const response: AxiosResponse = await axios.post(

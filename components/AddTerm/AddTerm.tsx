@@ -1,100 +1,86 @@
 import React, { useCallback, useState } from "react";
-import InputWrapper from "../InputWrapper";
-import Button from '@/components/Button/Button';
-import cn from 'classnames';
-import styles from './AddTerm.module.scss';
 import { useRouter } from 'next/navigation';
-import {IKeywords, INewTerm , Language, newTermSchema} from '@/utils/keywords/keywords.types'
+import {IKeyword, IKeywords, INewTerm , Language, newTermSchema} from '@/utils/keywords/keywords.types'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Button from '@/components/Button/Button';
 import { basicError, basicSucsess } from "@/utils/notifications";
+import AddTermForm from "./FormAddTerm/AddTermForm";
+import { createSemanticDiagnosticsBuilderProgram } from "typescript";
+import styles from './AddTerm.module.scss';
 
 const AddTerm = () => {
-    
-    
-    const [selectedLanguage, setSelectedLanguage] = useState('hebrew');
     const [submitting, setSubmitting] = useState(false);
     const router = useRouter();
     const {
         register,
         handleSubmit,
         formState: { errors},
-    } = useForm<INewTerm>({
+    } = useForm<IKeywords>({
         resolver: yupResolver(newTermSchema),
     });
-
+    const [newTermValue,setNewTermValue] = useState<IKeywords>({} as IKeywords);
     console.log(errors);
+
+    console.log(newTermValue);
     
 
-
-    const dropdownChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) =>{
-        console.log(event.currentTarget.value);
-        setSelectedLanguage(event.currentTarget.value);
-    }
-
-    const onSubmit = useCallback(
-        async (values: INewTerm): Promise<void> => {
+    const sendTerm = async (event: React.MouseEvent<HTMLButtonElement>) => {
             try {
-                console.log(values);
+                console.log(newTermValue);
+                console.log(newTermValue.he);
 
-                setSubmitting(true);
-                const res: any = await (
+                if(newTermValue.he !=  undefined || newTermValue.en !=  undefined || newTermValue.ar !=  undefined)
+                {
+                    setSubmitting(true);
+                    const res: any = await (
                     await fetch('/api/keywords/new-term', {
                         method: 'POST',
-                        body: JSON.stringify(values),
+                        body: JSON.stringify(newTermValue),
                     })
-                ).json();
-                if (res.status >= 400) {
-                    basicError(res.error?.message || 'Something went wrong');
-                    return;
-                }
+                    ).json();
+                    if (res.status >= 400) {
+                        basicError(res.error?.message || 'Something went wrong');
+                        return;
+                    }
                 basicSucsess("The term is added!");
-                router.push('/?keyword='+values.keyword);
+                router.push('/');
+                }
+                else
+                {
+                    basicError("You must fill in at least one of the languages!")
+                }
                 
+
             } catch (err: any) {
                 console.log(err);
             } finally {
                 setSubmitting(false);
             }
-        },
-        [],
-    );
+        }
+    
 
     return (
-        <div className="flex flex-col mx-auto xs:w-10/12 md:w-1/2 lg:w-1/3 gap-y-3.5">
-            <form className="pt-20" onSubmit={handleSubmit(onSubmit)}>
-                    <InputWrapper labelId={'keyword'} labelText={'Term'}>
-                        <input autoComplete={'off'}
-                            className={cn(errors.keyword && 'invalid')}
-                            {...register('keyword')}/>
-                    </InputWrapper>
+        <div>
+           
+            <h3 className="text-center font-semibold ">You need to fill in the term fields in at least one language, when finished click "Save".</h3>
+            <h3 className="text-center font-semibold ">When you are ready to add the term in one or more languages click "Send".</h3>
 
-                    <InputWrapper labelId={'meaning'} labelText={'Meaning'}>
-                        <input autoComplete={'off'}
-                            className={cn(errors.meaning && 'invalid')}
-                            {...register('meaning')}/>
-                    </InputWrapper>
-
-                    <InputWrapper labelId={'language'} labelText={'Language'}>
-                        <select {...register('language')} id="languages" onChange={dropdownChangeHandler} className="py-2 px-3 bg-dark-medium border-main-green border-2 rounded-lg border-solid w-full text-light-grey font-normal">
-                            <option selected value={Language.HEBREW}>עברית</option>
-                            <option value={Language.ARABIC}>عربيه</option>
-                            <option value={Language.ENGLISH}>English</option>
-                        </select>
-                    </InputWrapper>
-                    
-
-                    <div className="margin-top: 100px">
-                        <span className="flex justify-center pt-5">
-                            <Button type="submit"
-                            disabled={submitting}
-                            showLoader={submitting}
-                            >
-                                Add Term
-                            </Button>
-                        </span>
-                    </div>
-            </form>
+            <AddTermForm strKeyword="Hebrew Term | מונח" strShort="Hebrew Short Meaning | פירוש קצר" strLong="Hebrew Long Meaning | פירוש ארוך" setNewTermValue={setNewTermValue} language={Language.HEBREW} />
+            <AddTermForm strKeyword="English Term" strShort="English Short Meaning" strLong="English Long Meaning" language={Language.ENGLISH} setNewTermValue={setNewTermValue}/>
+            <AddTermForm strKeyword="Arabic Term | مصطلح عربي" strShort="Arabic Short Meaning | معنى قصير عربي" strLong="Arabic Long Meaning | معنى طويل عربي" language={Language.ARABIC} setNewTermValue={setNewTermValue}/>
+                
+              
+            <div className="margin-top: 100px">
+                <span className="flex justify-center pt-5">
+                    <button className="py-2 px-3 bg-dark-medium border-main-green border-2 rounded-2xl border-solid w-32 text-light-grey font-normal text-base"
+                        onClick={sendTerm}
+                    >
+                    Send Term
+                    </button>
+                </span>
+            </div>
+            
         </div>
 
     );
