@@ -3,9 +3,6 @@ import * as Yup from 'yup';
 export enum Language {
     ENGLISH = 'en',
     HEBREW = 'he',
-<<<<<<< HEAD
-    ARABIC = 'ar'
-=======
     ARABIC = 'ar',
 }
 
@@ -17,7 +14,6 @@ export interface IKeyword {
     likes: Array<string>;
     dislikes: Array<string>;
     _id: string;
->>>>>>> 14f00b3812c46a0fce31189fd071638a8660f6d1
 }
 
 export interface IKeywords {
