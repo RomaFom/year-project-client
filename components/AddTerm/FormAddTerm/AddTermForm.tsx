@@ -59,6 +59,7 @@ const AddTermForm:React.FC<Props> = ({strKeyword,strShort,strLong,setNewTermValu
                 console.log(err);
 
             } finally {
+                
                 setSubmitting(false);
             }
         },
