@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card, { CardType } from '@/components/Card/Card';
 import Grid from '@/components/Grid';
 import AutoSuggest from '@/components/Search/AutoSuggest';
@@ -19,8 +19,18 @@ const Search: React.FC = () => {
         cardLang: Language.ENGLISH,
     });
 
-    const { isError, isFetching, isLoading, data, error } =
+    const { isError, isFetching, isLoading, data, error, refetch } =
         useSearchKeywords(searchValue);
+
+    useEffect(() => {
+        if (data?.data.length && selected?._id) {
+            data.data.forEach(item => {
+                if (item._id === selected._id) {
+                    setSelected(item);
+                }
+            });
+        }
+    }, [data]);
 
     return (
         <div className={'pt-5'}>
@@ -39,6 +49,7 @@ const Search: React.FC = () => {
                 // >
                 <Grid>
                     <Card
+                        callback={refetch}
                         className={cn('w-full min-h-[200px]')}
                         item={selected}
                         lang={lang}
