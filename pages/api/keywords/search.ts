@@ -1,6 +1,5 @@
 import * as process from 'process';
 import axios, { AxiosResponse } from 'axios';
-import { IUserDataResponse } from '@/utils/api';
 import { IKeywordResponse } from '@/utils/api/keywords.types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -13,11 +12,8 @@ export default async function handler(
         // console.log(req.query);
         const { keyword } = req.query;
 
-        const response: AxiosResponse = await axios.post(
-            process.env.CORE_API + 'keywords/search',
-            {
-                keyword: keyword,
-            },
+        const response: AxiosResponse = await axios.get(
+            process.env.CORE_API + 'keywords/search?keyword=' + keyword,
         );
 
         res.status(response.status).json({
