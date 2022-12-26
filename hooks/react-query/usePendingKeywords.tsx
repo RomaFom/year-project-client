@@ -5,14 +5,16 @@ interface IHook {
     isLoading: boolean;
     isError: boolean;
     error: any;
-    data: Array<IKeywords>;
+    data: Array<IKeywords> | undefined;
     isFetching: boolean;
-    refetch: () => unknown;
+    refetch: () => void;
 }
 
 export const useGetPendingKeywords = (lang: string): IHook => {
     // create modifiable state
-    const { isLoading, isError, error, data = [], isFetching, refetch } = useQuery<IHook['data']>({
+    const { isLoading, isError, error, data, isFetching, refetch } = useQuery<
+        IHook['data']
+    >({
         queryKey: ['pending-keywords', lang],
         queryFn: () =>
             fetch(`api/keywords/pending-keywords?lang=${lang}`)
@@ -21,6 +23,6 @@ export const useGetPendingKeywords = (lang: string): IHook => {
         enabled: !!lang,
         keepPreviousData: true,
         refetchOnWindowFocus: false,
-    })
-    return { isLoading, isError, error, data, isFetching, refetch }
+    });
+    return { isLoading, isError, error, data, isFetching, refetch };
 };

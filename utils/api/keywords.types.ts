@@ -11,5 +11,5 @@ export interface IApproveKeywordRequest {
 }
 
 export interface IApproveKeywordResponse extends BaseResponse {
-    data?: IKeywords
+    data?: IKeywords;
 }

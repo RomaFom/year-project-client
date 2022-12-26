@@ -1,26 +1,27 @@
 import * as process from 'process';
 import axios, { AxiosResponse } from 'axios';
-import { IKeywordResponse } from '@/utils/api/keywords.types';
+import { IApproveKeywordResponse } from '@/utils/api/keywords.types';
+import { parseCookie } from '@/utils/api/parseCookie';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<IKeywordResponse>,
+    res: NextApiResponse<IApproveKeywordResponse>,
 ): Promise<void> {
     try {
-        // const body = JSON.parse(req.body);
-        // console.log(req.query);
-        const keyword = JSON.parse(req.body);
-
-        // validate request body
-        if (!Object.keys(keyword).length) res.status(400).json({
-            status: 400,
-            error: {message: "Keyword body is invalid"}
-        });
-
-        // send acturl request to server w/ keyword
+        const token = parseCookie(req.headers.cookie as string);
+        const { id, langId } = JSON.parse(req.body);
         const response: AxiosResponse = await axios.post(
-            `${process.env.CORE_API}keywords/add`, keyword
+            process.env.CORE_API + 'keywords/authorize-keyword',
+            {
+                id,
+                langId,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
         );
 
         // send success status

@@ -7,6 +7,7 @@ import {
 } from 'react-icons/ai';
 
 import { BsPatchCheck } from 'react-icons/bs';
+import Button from '@/components/Button/Button';
 import { ILanguageDetect } from '@/components/Search/Search';
 import Tooltip from '@/components/Tooltip/Tooltip';
 import { IKeywords, Language } from '@/utils/keywords/keywords.types';
@@ -21,8 +22,15 @@ type Props = {
     variant: CardType;
     lang: ILanguageDetect;
     className?: string;
+    approveKeywordHandler: (id: string, langId: string) => void;
 };
-const Card: React.FC<Props> = ({ item, variant, lang, className }) => (
+const Card: React.FC<Props> = ({
+    item,
+    variant,
+    lang,
+    className,
+    approveKeywordHandler,
+}) => (
     <div
         className={cn(
             styles.card,
@@ -33,6 +41,7 @@ const Card: React.FC<Props> = ({ item, variant, lang, className }) => (
             'flex flex-col',
             'text-light-oxford-blue text-xl',
             'bg-gradient-to-r',
+            'min-w-[280px] max-w-[300px]',
             variant,
         )}
         style={{
@@ -68,6 +77,17 @@ const Card: React.FC<Props> = ({ item, variant, lang, className }) => (
                 {item[lang.cardLang].likes.length}
                 <AiOutlineLike className={'my-auto'} />
             </div>
+
+            <Button
+                buttonStyle={'secondary'}
+                onClick={() => {
+                    approveKeywordHandler(item._id, item[lang.cardLang]._id);
+                }}
+                showLoader={false}
+                type={'button'}
+            >
+                Approve
+            </Button>
 
             <div className={'flex gap-2'}>
                 {item[lang.cardLang].dislikes.length}
