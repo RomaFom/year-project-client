@@ -11,16 +11,9 @@ export default async function handler(
     try {
         const { lang } = req.query;
 
-        // -- check language query
-        if (!lang) {
-            return res.status(400).json({
-                status: 400, error: {message: "Language not provided."}
-            });
-        }
-
         const response: AxiosResponse = await axios.get(
-            `${process.env.CORE_API}keywords/pending?lang=${lang}`
-        );
+            `${process.env.CORE_API}keywords/pending${lang ? `?lang=${lang}` : ''}`
+        )
 
         res.status(response.status).json({
             status: response.status,

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { usePendingKeywords } from '@/hooks/react-query/usePendingKeywords';
+import { useGetPendingKeywords } from '@/hooks/react-query/usePendingKeywords';
 // types
 import { Language } from '@/utils/keywords/keywords.types';
+import { IApproveKeywordRequest, IApproveKeywordResponse } from '@/utils/api';
 // components
 import PendingCard from '@/components/Card/PendingCard';
 import Grid from '../Grid';
@@ -12,7 +13,24 @@ import Grid from '../Grid';
 const Pending: React.FC = () => {
     // states
     const [lang, setLang] = useState<Language>(Language.ENGLISH);
-    const { data, approveKeyword } = usePendingKeywords(lang);
+    const { data, refetch } = useGetPendingKeywords(lang);
+    // handlers
+    const approveKeywordHandler = async (kwid: string, lang: Language) => {
+        // -- approve keywords
+        const langId = data?.find(kw => kw._id === kwid)?.[lang]?._id
+        // validate keyword id
+        if (!langId) return;
+        const body: IApproveKeywordRequest = {id: kwid, langId}
+        // send request
+        fetch('/api/keywords/approve-keyword', {method: 'POST', body: JSON.stringify(body)})
+            .then(res => res.json())
+            .then((data: IApproveKeywordResponse) => {
+                // -- error handling
+                if (data.status >= 400 || !data.data)
+                    return alert(data.error?.message ?? 'Something went wrong...')
+                refetch()
+            });
+    }
 
     return (
         <div>
@@ -28,7 +46,7 @@ const Pending: React.FC = () => {
                         <PendingCard
                             key={kw._id}
                             item={kw}
-                            approveKeywordHandler={approveKeyword}
+                            approveKeywordHandler={approveKeywordHandler}
                             lang={lang}
                         />)
                 }
