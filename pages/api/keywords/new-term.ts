@@ -18,8 +18,6 @@ export default async function handler(
             },
         );
 
-        console.log(response);
-
         res.status(response.status).json({
             status: response.status,
         });
