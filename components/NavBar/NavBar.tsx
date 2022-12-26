@@ -77,7 +77,7 @@ const NavBar: React.FC<Props> = ({ token }) => {
                                     </button>
                                     <div className={styles.dropdownMenu}>
                                         <button type={'button'}>
-                                            <Link href={'/'}>See Pending</Link>
+                                            <Link href={'/pending'}>See Pending</Link>
                                         </button>
                                         {user.role === Roles.SUPERUSER && (
                                             <button type={'button'}>
