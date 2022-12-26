@@ -78,16 +78,21 @@ const Card: React.FC<Props> = ({
                 <AiOutlineLike className={'my-auto'} />
             </div>
 
-            <Button
-                buttonStyle={'secondary'}
-                onClick={() => {
-                    approveKeywordHandler(item._id, item[lang.cardLang]._id);
-                }}
-                showLoader={false}
-                type={'button'}
-            >
-                Approve
-            </Button>
+            {approveKeywordHandler && (
+                <Button
+                    buttonStyle={'secondary'}
+                    onClick={() => {
+                        approveKeywordHandler(
+                            item._id,
+                            item[lang.cardLang]._id,
+                        );
+                    }}
+                    showLoader={false}
+                    type={'button'}
+                >
+                    Approve
+                </Button>
+            )}
 
             <div className={'flex gap-2'}>
                 {item[lang.cardLang].dislikes.length}
