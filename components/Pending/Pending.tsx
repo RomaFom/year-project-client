@@ -17,10 +17,8 @@ const Pending: React.FC = () => {
         inputLang: Language.ENGLISH,
         cardLang: Language.ENGLISH,
     });
-    // console.log('lang', lang);
-    const { data, refetch } = useGetPendingKeywords(lang.cardLang);
 
-    console.log(lang);
+    const { data, refetch } = useGetPendingKeywords(lang.cardLang);
 
     const approveKeywordHandler = useCallback(
         async (id: string, langId: string): Promise<void> => {
@@ -66,17 +64,13 @@ const Pending: React.FC = () => {
                     keyword =>
                         !keyword[lang.cardLang].isAuthorized &&
                         keyword[lang.cardLang].keyword && (
-                            <>
-                                <Card
-                                    approveKeywordHandler={
-                                        approveKeywordHandler
-                                    }
-                                    item={keyword}
-                                    key={keyword._id}
-                                    lang={lang}
-                                    variant={CardType.RED}
-                                />
-                            </>
+                            <Card
+                                approveKeywordHandler={approveKeywordHandler}
+                                item={keyword}
+                                key={keyword[lang.cardLang]._id}
+                                lang={lang}
+                                variant={CardType.RED}
+                            />
                         ),
                 )}
             </Grid>
