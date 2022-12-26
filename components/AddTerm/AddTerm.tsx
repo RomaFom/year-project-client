@@ -24,11 +24,7 @@ const AddTerm = (): JSX.Element => {
 
     const sendTerm = useCallback(async (): Promise<void> => {
         try {
-            if (
-                newTermValue.he != undefined ||
-                newTermValue.en != undefined ||
-                newTermValue.ar != undefined
-            ) {
+            if (newTermValue.he || newTermValue.en || newTermValue.ar) {
                 setSubmitting(true);
                 const res: any = await (
                     await fetch('/api/keywords/new-term', {
@@ -50,7 +46,7 @@ const AddTerm = (): JSX.Element => {
         } finally {
             setSubmitting(false);
         }
-    }, []);
+    }, [newTermValue]);
 
     return (
         <div>

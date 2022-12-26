@@ -13,8 +13,6 @@ export const basicError = (message: string): void => {
     });
 };
 
-
-
 export const basicSucsess = (message: string): void => {
     toast.success(message, {
         position: 'top-center',
