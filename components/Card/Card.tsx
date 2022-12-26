@@ -10,6 +10,7 @@ import { BsPatchCheck } from 'react-icons/bs';
 import Tooltip from '@/components/Tooltip/Tooltip';
 import { IKeywords } from '@/utils/keywords/keywords.types';
 import styles from './Card.module.scss';
+import axios from 'axios';
 export enum CardType {
     GREEN = 'from-green-light via-cyan-light to-green-light',
     RED = 'from-red-300 via-red-200 to-red-300',
@@ -18,6 +19,7 @@ export enum CardType {
 type Props = {
     item: IKeywords;
     variant: CardType;
+    
 };
 const Card: React.FC<Props> = ({ item, variant }) => (
     <div
@@ -49,12 +51,32 @@ const Card: React.FC<Props> = ({ item, variant }) => (
         <div className={'flex justify-between mt-auto'}>
             <div className={'flex gap-2'}>
                 {item.likes.length}
-                <AiOutlineLike className={'my-auto'} />
+                <AiOutlineLike className={'my-auto'} onClick={async ()=>{
+                    await fetch("api/keywords/like" ,{
+                    method:"POST",
+                    body:JSON.stringify({
+                        id:item._id,
+                        langid:item.language
+
+                    })
+                   })
+                    
+                }} />
             </div>
 
             <div className={'flex gap-2'}>
                 {item.dislikes.length}
-                <AiOutlineDislike className={'my-auto'} />
+                <AiOutlineDislike className={'my-auto'} onClick={async ()=>{
+                    await fetch("api/keywords/dislike" ,{
+                    method:"POST",
+                    body:JSON.stringify({
+                        id:item._id,
+                        langid:item.language
+
+                    })
+                   })
+                    
+                }} />
             </div>
         </div>
     </div>
