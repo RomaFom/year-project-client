@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     AiOutlineDislike,
     AiOutlineInfoCircle,
@@ -13,6 +13,8 @@ import { LangDropDown } from '@/components/LanguageSwitcher';
 import CardDropDownFlags from '@/components/LanguageSwitcher/CardDropDownFlags';
 import { ILanguageDetect } from '@/components/Search/Search';
 import Tooltip from '@/components/Tooltip/Tooltip';
+import { useUser } from '@/providers/UserProvider';
+import { IKeywordResponse } from '@/utils/api';
 import { IKeywords, Language } from '@/utils/keywords/keywords.types';
 import { basicError, basicSucsess } from '@/utils/notifications';
 import styles from './Card.module.scss';
@@ -37,8 +39,13 @@ const Card: React.FC<Props> = ({
     approveKeywordHandler,
     refetch,
 }) => {
-    const [cardLang, setCardLang] = useState(lang.cardLang);
+    const [cardLang, setCardLang] = useState(lang.inputLang);
     const { t } = useTranslation('');
+    const { user } = useUser();
+
+    useEffect(() => {
+        setCardLang(lang.cardLang);
+    }, [lang.cardLang, item]);
 
     const handleChangeCardLang = useCallback((newLang: string) => {
         setCardLang(newLang as Language);
@@ -62,21 +69,32 @@ const Card: React.FC<Props> = ({
     const handleSubmitRate = useCallback(
         async (action: 'like' | 'dislike') => {
             try {
-                const res = await fetch(`/api/keywords/${action}`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        id: item._id,
-                        langId: item[lang.cardLang]._id,
-                    }),
-                });
+                if (!user?.token) {
+                    basicError('You need to be logged in to rate keywords');
+                    return;
+                }
+                const res: IKeywordResponse = await fetch(
+                    `/api/keywords/${action}`,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            id: item._id,
+                            langId: item[lang.cardLang]._id,
+                        }),
+                    },
+                );
+                if (res.status >= 400) {
+                    basicError('Something went wrong');
+                    return;
+                }
                 basicSucsess('Submitted');
-                refetch?.();
+                refetch && refetch();
             } catch (e) {
                 basicError('Error');
                 console.error(e);
             }
         },
-        [item, refetch],
+        [item, refetch, user],
     );
 
     return (

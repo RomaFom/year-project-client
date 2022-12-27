@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@/components/Card/Card';
 import Grid from '@/components/Grid';
 import AutoSuggest from '@/components/Search/AutoSuggest';
@@ -20,6 +20,16 @@ const Search: React.FC = () => {
     });
 
     const { isFetching, data, refetch } = useSearchKeywords(searchValue);
+
+    useEffect(() => {
+        if (data?.data?.length && selected?._id) {
+            data.data.forEach(item => {
+                if (item._id === selected._id) {
+                    setSelected(item);
+                }
+            });
+        }
+    }, [data]);
 
     return (
         <div className={'pt-5'}>
