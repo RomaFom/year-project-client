@@ -19,7 +19,7 @@ const Search: React.FC = () => {
         cardLang: Language.ENGLISH,
     });
 
-    const { isFetching, data } = useSearchKeywords(searchValue);
+    const { isFetching, data, refetch } = useSearchKeywords(searchValue);
 
     return (
         <div className={'pt-5'}>
@@ -38,6 +38,7 @@ const Search: React.FC = () => {
                         className={cn('w-full min-h-[200px]')}
                         item={selected}
                         lang={lang}
+                        refetch={refetch}
                     />
                 </Grid>
             )}
