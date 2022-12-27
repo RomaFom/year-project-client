@@ -1,0 +1,28 @@
+{
+  "nav": {
+    "home": "بيت",
+    "login": "تسجيل الدخول",
+    "signup": "اشتراك",
+    "menu": "قائمة",
+    "admin-menu": "قائمة المسؤول",
+    "add-term": "إضافة مصطلح",
+    "see-pending": "انظر المعلقة",
+    "add-admin": "إضافة مشرف"
+  },
+  "login": {
+    "username": "اسم االمستخدم",
+    "password": "كلمه السر",
+    "confirm": "تأكيد كلمة المرور"
+  },
+  "btn": {
+    "signup": "اشتراك",
+    "login": "تسجيل الدخول"
+  },
+  "auto-suggest": {
+    "placeholder": "ابحث عن مصطلح"
+  },
+  "tooltip": {
+    "authorized": "مخول",
+    "unauthorized": "غير مخول"
+  }
+}

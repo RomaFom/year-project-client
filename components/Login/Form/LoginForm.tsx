@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import cn from 'classnames';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -18,6 +19,7 @@ const LoginForm: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const router = useRouter();
     const { user } = useUser();
+    const { t } = useTranslation('');
 
     const {
         register,
@@ -63,14 +65,20 @@ const LoginForm: React.FC = () => {
     return (
         <form className="pt-20" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col mx-auto xs:w-10/12 md:w-1/2 lg:w-1/3 gap-y-3.5">
-                <InputWrapper labelId={'username'} labelText={'Username'}>
+                <InputWrapper
+                    labelId={'username'}
+                    labelText={t('login.username') as string}
+                >
                     <input
                         autoComplete={'off'}
                         className={cn(errors.username && 'invalid')}
                         {...register('username')}
                     />
                 </InputWrapper>
-                <InputWrapper labelId={'password'} labelText={'Password'}>
+                <InputWrapper
+                    labelId={'password'}
+                    labelText={t('login.password') as string}
+                >
                     <input
                         autoComplete={'off'}
                         className={cn(errors.password && 'invalid')}
@@ -84,7 +92,7 @@ const LoginForm: React.FC = () => {
                         showLoader={submitting}
                         type="submit"
                     >
-                        Login
+                        {t('btn.login') as string}
                     </Button>
                 </span>
             </div>

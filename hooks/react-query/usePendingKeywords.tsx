@@ -17,7 +17,7 @@ export const useGetPendingKeywords = (lang: string): IHook => {
     >({
         queryKey: ['pending-keywords', lang],
         queryFn: () =>
-            fetch(`api/keywords/pending-keywords?lang=${lang}`)
+            fetch(`/api/keywords/pending-keywords?lang=${lang}`)
                 .then(res => res.json())
                 .then(res => res.data),
         enabled: !!lang,

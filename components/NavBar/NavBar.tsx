@@ -1,22 +1,31 @@
 import cn from 'classnames';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { BiDoorOpen } from 'react-icons/bi';
 import { BsChevronDown } from 'react-icons/bs';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useUser } from '@/providers/UserProvider/UserContext';
-
 import { Roles } from '@/utils/api';
 import styles from './NavBar.module.scss';
+
 type Props = {
     token: string;
 };
 const NavBar: React.FC<Props> = ({ token }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { user, clearUser } = useUser();
+    const { t } = useTranslation('');
 
     return (
-        <nav className={cn(styles.navbar, menuOpen ? styles.open : '')}>
+        <nav
+            className={cn(
+                styles.navbar,
+                menuOpen ? styles.open : '',
+                'capitalize',
+            )}
+        >
             {menuOpen ? (
                 <AiOutlineClose
                     className={cn(styles.burger)}
@@ -33,10 +42,10 @@ const NavBar: React.FC<Props> = ({ token }) => {
                 />
             )}
             <button
-                className={cn(styles.burgerBtn, styles.button)}
+                className={cn(styles.burgerBtn, styles.button, 'capitalize')}
                 type={'button'}
             >
-                <Link href={'/'}>Home</Link>
+                <Link href={'/'}>{t('nav.home')}</Link>
             </button>
             <div className={cn('flex justify-between w-full')}>
                 <div className={styles.dropdowns}>
@@ -47,18 +56,14 @@ const NavBar: React.FC<Props> = ({ token }) => {
                                     className={styles.button}
                                     type={'button'}
                                 >
-                                    Menu{' '}
+                                    {t('nav.menu')}{' '}
                                     <BsChevronDown className={styles.arrow} />
                                 </button>
                                 <div className={styles.dropdownMenu}>
                                     <button type={'button'}>
-                                        <Link href={'/add-term'}>Add Term</Link>
-                                    </button>
-                                    <button type={'button'}>
-                                        <Link href={'/'}>Link 2</Link>
-                                    </button>
-                                    <button type={'button'}>
-                                        <Link href={'/'}>Link 3</Link>
+                                        <Link href={'/add-term'}>
+                                            {t('nav.add-term')}
+                                        </Link>
                                     </button>
                                 </div>
                             </div>
@@ -70,19 +75,21 @@ const NavBar: React.FC<Props> = ({ token }) => {
                                         className={styles.button}
                                         type={'button'}
                                     >
-                                        Admin Menu{' '}
+                                        {t('nav.admin-menu')}{' '}
                                         <BsChevronDown
                                             className={styles.arrow}
                                         />
                                     </button>
                                     <div className={styles.dropdownMenu}>
                                         <button type={'button'}>
-                                            <Link href={'/pending'}>See Pending</Link>
+                                            <Link href={'/pending'}>
+                                                {t('nav.see-pending')}
+                                            </Link>
                                         </button>
                                         {user.role === Roles.SUPERUSER && (
                                             <button type={'button'}>
                                                 <Link href={'/admin/add-admin'}>
-                                                    Add Admin
+                                                    {t('nav.add-admin')}
                                                 </Link>
                                             </button>
                                         )}
@@ -99,7 +106,9 @@ const NavBar: React.FC<Props> = ({ token }) => {
                                     className={styles.button}
                                     type={'button'}
                                 >
-                                    <Link href={'/login'}>Login</Link>
+                                    <Link href={'/login'}>
+                                        {t('nav.login')}
+                                    </Link>
                                 </button>
                             </div>
 
@@ -108,12 +117,16 @@ const NavBar: React.FC<Props> = ({ token }) => {
                                     className={styles.button}
                                     type={'button'}
                                 >
-                                    <Link href={'/sign-up'}>Sign Up</Link>
+                                    <Link href={'/sign-up'}>
+                                        {t('nav.signup')}
+                                    </Link>
                                 </button>
                             </div>
                         </>
                     )}
                 </div>
+
+                <LanguageSwitcher />
 
                 {token && (
                     <div className={styles.dropdown}>

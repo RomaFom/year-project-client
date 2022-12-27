@@ -1,0 +1,28 @@
+{
+  "nav": {
+    "home": "בית",
+    "login": "התחבר",
+    "signup": "הרשמה",
+    "menu": "תפריט",
+    "admin-menu": "תפריט מנהל",
+    "add-term": "הוסף מושג",
+    "see-pending": "ממתינים לאישור",
+    "add-admin": "הוסף מנהל"
+  },
+  "login": {
+    "username": "שם משתמש",
+    "password": "סיסמא",
+    "confirm": "אישור סיסמא"
+  },
+  "btn": {
+    "signup": "הירשם",
+    "login": "התחבר"
+  },
+  "auto-suggest": {
+    "placeholder": "חפש מושג"
+  },
+  "tooltip": {
+    "authorized": "מורשה",
+    "unauthorized": "לא מורשה"
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import Card, { CardType } from '@/components/Card/Card';
+import Card from '@/components/Card/Card';
 import Grid from '@/components/Grid';
 import { ILanguageDetect } from '@/components/Search/Search';
 import { useGetPendingKeywords } from '@/hooks/react-query/usePendingKeywords';
@@ -8,11 +8,7 @@ import { Language } from '@/utils/keywords/keywords.types';
 import { basicError } from '@/utils/notifications';
 // components
 
-/**
- * Only admins can access this page component.
- */
 const Pending: React.FC = () => {
-    // states
     const [lang, setLang] = useState<ILanguageDetect>({
         inputLang: Language.ENGLISH,
         cardLang: Language.ENGLISH,
@@ -69,7 +65,6 @@ const Pending: React.FC = () => {
                                 item={keyword}
                                 key={keyword[lang.cardLang]._id}
                                 lang={lang}
-                                variant={CardType.RED}
                             />
                         ),
                 )}
