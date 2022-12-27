@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     AiOutlineDislike,
     AiOutlineInfoCircle,
@@ -13,7 +13,10 @@ import { LangDropDown } from '@/components/LanguageSwitcher';
 import CardDropDownFlags from '@/components/LanguageSwitcher/CardDropDownFlags';
 import { ILanguageDetect } from '@/components/Search/Search';
 import Tooltip from '@/components/Tooltip/Tooltip';
+import { useUser } from '@/providers/UserProvider';
+import { IKeywordResponse } from '@/utils/api';
 import { IKeywords, Language } from '@/utils/keywords/keywords.types';
+import { basicError, basicSucsess } from '@/utils/notifications';
 import styles from './Card.module.scss';
 
 export enum CardType {
@@ -27,15 +30,22 @@ type Props = {
     lang: ILanguageDetect;
     className?: string;
     approveKeywordHandler?: (id: string, langId: string) => void;
+    refetch?: () => void;
 };
 const Card: React.FC<Props> = ({
     item,
     lang,
     className,
     approveKeywordHandler,
+    refetch,
 }) => {
-    const [cardLang, setCardLang] = useState(lang.cardLang);
+    const [cardLang, setCardLang] = useState(lang.inputLang);
     const { t } = useTranslation('');
+    const { user } = useUser();
+
+    useEffect(() => {
+        setCardLang(lang.cardLang);
+    }, [lang.cardLang, item]);
 
     const handleChangeCardLang = useCallback((newLang: string) => {
         setCardLang(newLang as Language);
@@ -54,6 +64,37 @@ const Card: React.FC<Props> = ({
     const canApprove = useMemo(
         () => approveKeywordHandler && !item[cardLang].isAuthorized,
         [item, approveKeywordHandler, cardLang],
+    );
+
+    const handleSubmitRate = useCallback(
+        async (action: 'like' | 'dislike') => {
+            try {
+                if (!user?.token) {
+                    basicError('You need to be logged in to rate keywords');
+                    return;
+                }
+                const res: IKeywordResponse = await fetch(
+                    `/api/keywords/${action}`,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            id: item._id,
+                            langId: item[lang.cardLang]._id,
+                        }),
+                    },
+                );
+                if (res.status >= 400) {
+                    basicError('Something went wrong');
+                    return;
+                }
+                basicSucsess('Submitted');
+                refetch && refetch();
+            } catch (e) {
+                basicError('Error');
+                console.error(e);
+            }
+        },
+        [item, refetch, user],
     );
 
     return (
@@ -115,7 +156,12 @@ const Card: React.FC<Props> = ({
             <div className={'flex justify-between mt-auto'}>
                 <div className={'flex gap-2'}>
                     {item[cardLang].likes.length}
-                    <AiOutlineLike className={'my-auto'} />
+                    <AiOutlineLike
+                        className={
+                            'my-auto cursor-pointer hover:scale-125 transform transition-all'
+                        }
+                        onClick={() => handleSubmitRate('like')}
+                    />
                 </div>
 
                 {canApprove && (
@@ -136,7 +182,12 @@ const Card: React.FC<Props> = ({
 
                 <div className={'flex gap-2'}>
                     {item[cardLang].dislikes.length}
-                    <AiOutlineDislike className={'my-auto'} />
+                    <AiOutlineDislike
+                        className={
+                            'my-auto cursor-pointer hover:scale-125 transform transition-all'
+                        }
+                        onClick={() => handleSubmitRate('dislike')}
+                    />
                 </div>
             </div>
         </div>
