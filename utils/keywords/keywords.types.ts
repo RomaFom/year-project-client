@@ -1,3 +1,5 @@
+import * as Yup from 'yup';
+
 export enum Language {
     ENGLISH = 'en',
     HEBREW = 'he',
@@ -7,7 +9,7 @@ export enum Language {
 export interface IKeyword {
     keyword: string;
     short: string;
-    long: Language;
+    long: string;
     isAuthorized: boolean;
     likes: Array<string>;
     dislikes: Array<string>;
@@ -20,6 +22,24 @@ export interface IKeywords {
     en: IKeyword;
     ar: IKeyword;
 }
+
+export interface INewTerm{
+    keyword: string;
+    short: string;
+    long: string;
+}
+
+
+export const newTermSchema = Yup.object().shape({
+    keyword: Yup.string()
+    .required('Term is required'),
+    short: Yup.string()
+    .required('Meaning is required')
+    .min(3, 'Meaning must be at least 3 characters'),
+    long: Yup.string()
+    .required('Long meaning is required')
+    .min(6, 'Long meaning must be at least 6 characters'),
+});
 
 // {
 //     "_id": "6387021fd80e47bf20dac1ad",
