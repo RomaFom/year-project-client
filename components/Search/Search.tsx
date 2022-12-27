@@ -23,7 +23,7 @@ const Search: React.FC = () => {
         useSearchKeywords(searchValue);
 
     useEffect(() => {
-        if (data?.data.length && selected?._id) {
+        if (data?.data?.length && selected?._id) {
             data.data.forEach(item => {
                 if (item._id === selected._id) {
                     setSelected(item);

@@ -12,6 +12,7 @@ import { ILanguageDetect } from '@/components/Search/Search';
 import Tooltip from '@/components/Tooltip/Tooltip';
 import { IKeywords, Language } from '@/utils/keywords/keywords.types';
 import styles from './Card.module.scss';
+import { basicSucsess,basicError } from '@/utils/notifications';
 export enum CardType {
     GREEN = 'from-green-light via-cyan-light to-green-light',
     RED = 'from-red-300 via-red-200 to-red-300',
@@ -35,6 +36,7 @@ const Card: React.FC<Props> = ({
         async (action: 'like' | 'dislike') => {
             try {
                 // TODO: Handle show message of success
+                basicSucsess('Good');
                 const res = await fetch(`api/keywords/${action}`, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -45,6 +47,7 @@ const Card: React.FC<Props> = ({
                 callback?.();
             } catch (e) {
                 // TODO: handle error
+                basicError('Error');
                 console.error(e);
             }
         },
