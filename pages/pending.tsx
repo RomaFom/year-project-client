@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 import Layout from '@/components/Layout/Layout';
 import Pending from '@/components/Pending/Pending';
@@ -16,6 +17,7 @@ const PendingPage: React.FC<SSRProps> = ({ token }) => (
 export default PendingPage;
 
 export const getServerSideProps: GetServerSideProps = async context => {
+    const { locale } = context;
     const cookies = context.req.headers.cookie || null;
     if (!cookies) {
         return {
@@ -42,7 +44,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
         (decoded.role === Roles.SUPERUSER || decoded.role === Roles.ADMIN)
     ) {
         return {
-            props: { token: parsed }, // will be passed to the page component as props
+            props: {
+                token: parsed,
+                ...(await serverSideTranslations(locale as string, ['common'])),
+            }, // will be passed to the page component as props
         };
     }
 

@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { useTranslation } from 'next-i18next';
 import React, {
     memo,
     useCallback,
@@ -35,6 +36,7 @@ const AutoSuggest: React.FC<Props> = ({
     const debouncedValue = useDebounce(inputValue, 700);
     const ref = useRef<HTMLInputElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+    const { t } = useTranslation('');
 
     const handleChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +97,7 @@ const AutoSuggest: React.FC<Props> = ({
                         'sm:w-[500px]',
                     )}
                     onChange={handleChange}
-                    placeholder={'Search for a keyword'}
+                    placeholder={t('auto-suggest.placeholder') as string}
                     ref={ref}
                     spellCheck={false}
                     type="text"
