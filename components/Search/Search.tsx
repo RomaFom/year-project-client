@@ -1,6 +1,6 @@
 import cn from 'classnames';
-import React, { useEffect, useState } from 'react';
-import Card, { CardType } from '@/components/Card/Card';
+import React, { useState } from 'react';
+import Card from '@/components/Card/Card';
 import Grid from '@/components/Grid';
 import AutoSuggest from '@/components/Search/AutoSuggest';
 import { useSearchKeywords } from '@/hooks/react-query';
@@ -19,18 +19,7 @@ const Search: React.FC = () => {
         cardLang: Language.ENGLISH,
     });
 
-    const { isError, isFetching, isLoading, data, error, refetch } =
-        useSearchKeywords(searchValue);
-
-    useEffect(() => {
-        if (data?.data?.length && selected?._id) {
-            data.data.forEach(item => {
-                if (item._id === selected._id) {
-                    setSelected(item);
-                }
-            });
-        }
-    }, [data]);
+    const { isFetching, data } = useSearchKeywords(searchValue);
 
     return (
         <div className={'pt-5'}>
@@ -44,23 +33,13 @@ const Search: React.FC = () => {
             />
 
             {selected._id && (
-                // <div
-                //     className={cn('flex justify-center sm:justify-start pt-10')}
-                // >
                 <Grid>
                     <Card
-                        callback={refetch}
                         className={cn('w-full min-h-[200px]')}
                         item={selected}
                         lang={lang}
-                        variant={
-                            selected[lang.cardLang].isAuthorized
-                                ? CardType.GREEN
-                                : CardType.RED
-                        }
                     />
                 </Grid>
-                // </div>
             )}
         </div>
     );

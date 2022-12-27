@@ -1,0 +1,28 @@
+{
+  "nav": {
+    "home": "Home",
+    "login": "Login",
+    "signup": "Sign Up",
+    "menu": "Menu",
+    "admin-menu": "Admin Menu",
+    "add-term": "Add Term",
+    "see-pending": "See Pending",
+    "add-admin": "Add Admin"
+  },
+  "login": {
+    "username": "Username",
+    "password": "Password",
+    "confirm": "Confirm Password"
+  },
+  "btn": {
+    "signup": "Sign Up",
+    "login": "Login"
+  },
+  "auto-suggest": {
+    "placeholder": "Search for a term"
+  },
+  "tooltip": {
+    "authorized": "Authorized",
+    "unauthorized": "Unauthorized"
+  }
+}

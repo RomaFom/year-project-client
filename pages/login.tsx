@@ -1,3 +1,5 @@
+import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 import Layout from '@/components/Layout/Layout';
 import Login from '@/components/Login';
@@ -14,11 +16,13 @@ const LoginPage: React.FC<SSRProps> = ({ token }) => (
 export default LoginPage;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export async function getServerSideProps(context: any) {
+export const getServerSideProps: GetServerSideProps = async context => {
     const cookies = context.req.headers.cookie || '';
     const parsed = parseCookie(cookies);
+    const { locale } = context;
     if (cookies) {
         return {
+            props: {},
             redirect: {
                 destination: '/',
             },
@@ -26,6 +30,9 @@ export async function getServerSideProps(context: any) {
     }
 
     return {
-        props: { token: parsed }, // will be passed to the page component as props
+        props: {
+            token: parsed,
+            ...(await serverSideTranslations(locale as string, ['common'])),
+        }, // will be passed to the page component as props
     };
-}
+};

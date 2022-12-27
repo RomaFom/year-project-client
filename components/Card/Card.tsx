@@ -1,6 +1,6 @@
-import axios from 'axios';
 import cn from 'classnames';
-import React, { memo, useCallback } from 'react';
+import { useTranslation } from 'next-i18next';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import {
     AiOutlineDislike,
     AiOutlineInfoCircle,
@@ -8,11 +8,14 @@ import {
 } from 'react-icons/ai';
 
 import { BsPatchCheck } from 'react-icons/bs';
+import Button from '@/components/Button/Button';
+import { LangDropDown } from '@/components/LanguageSwitcher';
+import CardDropDownFlags from '@/components/LanguageSwitcher/CardDropDownFlags';
 import { ILanguageDetect } from '@/components/Search/Search';
 import Tooltip from '@/components/Tooltip/Tooltip';
 import { IKeywords, Language } from '@/utils/keywords/keywords.types';
 import styles from './Card.module.scss';
-import { basicSucsess,basicError } from '@/utils/notifications';
+
 export enum CardType {
     GREEN = 'from-green-light via-cyan-light to-green-light',
     RED = 'from-red-300 via-red-200 to-red-300',
@@ -20,38 +23,37 @@ export enum CardType {
 
 type Props = {
     item: IKeywords;
-    variant: CardType;
+    // variant: CardType;
     lang: ILanguageDetect;
     className?: string;
-    callback?: () => void;
+    approveKeywordHandler?: (id: string, langId: string) => void;
 };
 const Card: React.FC<Props> = ({
     item,
-    variant,
     lang,
     className,
-    callback,
+    approveKeywordHandler,
 }) => {
-    const handleSubmitRate = useCallback(
-        async (action: 'like' | 'dislike') => {
-            try {
-                // TODO: Handle show message of success
-                basicSucsess('Good');
-                const res = await fetch(`api/keywords/${action}`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        id: item._id,
-                        langId: item[lang.cardLang]._id,
-                    }),
-                });
-                callback?.();
-            } catch (e) {
-                // TODO: handle error
-                basicError('Error');
-                console.error(e);
-            }
-        },
-        [item, callback],
+    const [cardLang, setCardLang] = useState(lang.cardLang);
+    const { t } = useTranslation('');
+
+    const handleChangeCardLang = useCallback((newLang: string) => {
+        setCardLang(newLang as Language);
+    }, []);
+
+    const availableLangs = useMemo(
+        () =>
+            Object.keys(item).filter(key => {
+                if (item[key as Language].keyword) {
+                    return key;
+                }
+            }),
+        [item],
+    );
+
+    const canApprove = useMemo(
+        () => approveKeywordHandler && !item[cardLang].isAuthorized,
+        [item, approveKeywordHandler, cardLang],
     );
 
     return (
@@ -65,58 +67,76 @@ const Card: React.FC<Props> = ({
                 'flex flex-col',
                 'text-light-oxford-blue text-xl',
                 'bg-gradient-to-r',
-                variant,
+                'min-w-[280px] max-w-[300px]',
+                item[cardLang].isAuthorized ? CardType.GREEN : CardType.RED,
             )}
             style={{
-                direction: lang.cardLang === Language.ENGLISH ? 'ltr' : 'rtl',
+                direction: cardLang === Language.ENGLISH ? 'ltr' : 'rtl',
             }}
         >
-            <Tooltip
-                className={cn('pb-3')}
-                text={
-                    item[lang.cardLang].isAuthorized
-                        ? 'Authorized'
-                        : 'Not Authorized'
-                }
-            >
-                {item[lang.cardLang].isAuthorized ? (
-                    <BsPatchCheck size={25} />
-                ) : (
-                    <AiOutlineInfoCircle size={25} />
-                )}
-            </Tooltip>
+            <div className={'flex place-content-between'}>
+                <Tooltip
+                    className={cn('pb-3')}
+                    text={
+                        item[cardLang].isAuthorized
+                            ? t('tooltip.authorized')
+                            : t('tooltip.unauthorized')
+                    }
+                >
+                    {item[cardLang].isAuthorized ? (
+                        <BsPatchCheck size={25} />
+                    ) : (
+                        <AiOutlineInfoCircle size={25} />
+                    )}
+                </Tooltip>
+                <div>
+                    <LangDropDown selected={cardLang}>
+                        <CardDropDownFlags
+                            cb={handleChangeCardLang}
+                            options={availableLangs}
+                            selected={cardLang}
+                        />
+                    </LangDropDown>
+                </div>
+            </div>
 
             <div
                 className={cn(
                     'mx-auto border-2 rounded-lg px-3 py-1 border-black',
                 )}
             >
-                {item[lang.cardLang].keyword}
+                {item[cardLang].keyword}
             </div>
             <div>
-                <div className={'text-start pt-2'}>
-                    {item[lang.cardLang].short}
-                </div>
-                <div className={'text-start pt-2'}>
-                    {item[lang.cardLang].long}
-                </div>
+                <div className={'text-start pt-2'}>{item[cardLang].short}</div>
+                <div className={'text-start pt-2'}>{item[cardLang].long}</div>
             </div>
+
             <div className={'flex justify-between mt-auto'}>
                 <div className={'flex gap-2'}>
-                    {item[lang.cardLang].likes.length}
-                    <AiOutlineLike
-                        className={'my-auto'}
-                        onClick={() => handleSubmitRate('like')}
-                    />
+                    {item[cardLang].likes.length}
+                    <AiOutlineLike className={'my-auto'} />
                 </div>
 
-                {/*{console.log(item[lang.cardLang]._id)}*/}
+                {canApprove && (
+                    <Button
+                        buttonStyle={'secondary'}
+                        onClick={() => {
+                            approveKeywordHandler?.(
+                                item._id,
+                                item[cardLang]._id,
+                            );
+                        }}
+                        showLoader={false}
+                        type={'button'}
+                    >
+                        Approve
+                    </Button>
+                )}
+
                 <div className={'flex gap-2'}>
-                    {item[lang.cardLang].dislikes.length}
-                    <AiOutlineDislike
-                        className={'my-auto'}
-                        onClick={() => handleSubmitRate('dislike')}
-                    />
+                    {item[cardLang].dislikes.length}
+                    <AiOutlineDislike className={'my-auto'} />
                 </div>
             </div>
         </div>

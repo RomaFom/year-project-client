@@ -9,7 +9,7 @@ type Props = {
     onClick?: () => void;
     type: 'button' | 'submit' | 'reset';
     className?: string;
-    buttonStyle?: 'primary' | 'secondary' | 'tertiary' | 'buy';
+    buttonStyle?: 'primary' | 'secondary' | 'tertiary' | 'buy' | 'secondary';
     showLoader: boolean;
 };
 const Button: React.FC<Props> = ({
