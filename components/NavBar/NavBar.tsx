@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
-import { BiDoorOpen } from 'react-icons/bi';
+import { BiDoorOpen, BiHome, BiUserCircle } from 'react-icons/bi';
 import { BsChevronDown } from 'react-icons/bs';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useUser } from '@/providers/UserProvider/UserContext';
@@ -45,8 +45,10 @@ const NavBar: React.FC<Props> = ({ token }) => {
                 className={cn(styles.burgerBtn, styles.button, 'capitalize')}
                 type={'button'}
             >
+                <BiHome className={cn('w-[30px] h-[30px]')} />
                 <Link href={'/'}>{t('nav.home')}</Link>
             </button>
+
             <div className={cn('flex justify-between w-full')}>
                 <div className={styles.dropdowns}>
                     {token && (
@@ -127,6 +129,18 @@ const NavBar: React.FC<Props> = ({ token }) => {
                 </div>
 
                 <LanguageSwitcher />
+
+                {token && (
+                    <div className={styles.dropdown}>
+                        <button className={styles.button} type={'button'}>
+                            <Link href={'/profile'}>
+                                <BiUserCircle
+                                    className={cn('w-[30px] h-[30px]')}
+                                />
+                            </Link>
+                        </button>
+                    </div>
+                )}
 
                 {token && (
                     <div className={styles.dropdown}>
