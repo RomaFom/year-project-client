@@ -51,6 +51,18 @@ const Card: React.FC<Props> = ({
         setCardLang(newLang as Language);
     }, []);
 
+    const seeMore = useCallback(() => { 
+        const targetDiv = document.getElementById("myDiv");
+        const btn = document.getElementById("toggle");
+        
+          if ( targetDiv != null && targetDiv.style.display !== "none") {
+            targetDiv.style.display = "none";
+          } else if (targetDiv != null) {
+            targetDiv.style.display = "block";
+          }
+        
+    }, []);
+
     const availableLangs = useMemo(
         () =>
             Object.keys(item).filter(key => {
@@ -97,6 +109,8 @@ const Card: React.FC<Props> = ({
         [item, refetch, user],
     );
 
+
+
     return (
         <div
             className={cn(
@@ -113,6 +127,7 @@ const Card: React.FC<Props> = ({
             )}
             style={{
                 direction: cardLang === Language.ENGLISH ? 'ltr' : 'rtl',
+              
             }}
         >
             <div className={'flex place-content-between'}>
@@ -150,7 +165,21 @@ const Card: React.FC<Props> = ({
             </div>
             <div>
                 <div className={'text-start pt-2'}>{item[cardLang].short}</div>
-                <div className={'text-start pt-2'}>{item[cardLang].long}</div>
+                <Button
+                        id = "toggle"
+                        buttonStyle={'primary'}
+                        onClick={() => {
+                            seeMore();
+                           
+                        }}
+                        showLoader={false}
+                        type={'button'}
+                        
+                    >
+                        long
+                </Button>
+                <div id = "myDiv" className={'text-start pt-2'} >{item[cardLang].long}</div>  
+                
             </div>
 
             <div className={'flex justify-between mt-auto'}>

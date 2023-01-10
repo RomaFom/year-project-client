@@ -4,6 +4,7 @@ import React from 'react';
 import { LineDots } from '@/components/Loaders';
 import styles from './Button.module.scss';
 type Props = {
+    id? :string,
     children: React.ReactNode;
     disabled?: boolean;
     onClick?: () => void;
@@ -13,6 +14,7 @@ type Props = {
     showLoader: boolean;
 };
 const Button: React.FC<Props> = ({
+    id,
     children,
     disabled,
     onClick,
