@@ -97,7 +97,9 @@ const Card: React.FC<Props> = ({
         [item, refetch, user],
     );
 
-    return (
+    if (!approveKeywordHandler && !item[cardLang].isAuthorized) return <></>
+    else if (approveKeywordHandler && item[cardLang].isAuthorized) return <></>
+    else return (
         <div
             className={cn(
                 styles.card,
